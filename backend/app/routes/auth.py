@@ -13,6 +13,13 @@ security = HTTPBearer()
 async def signup(user: UserCreate):
     db = get_database()
     
+    # Debug: Check if database connection is working
+    if db is None:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Database connection failed"
+        )
+    
     # Check if user already exists
     existing_user = db.users.find_one({"email": user.email})
     if existing_user:
