@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build outputs
+.next/
+dist/
+build/
+
+# Environment variables
+.env.local
+.env.production.local
+
+# Uploads
+uploads/*.csv
+uploads/*.json
+!uploads/.gitkeep
+
+# Database
+*.db
+*.sqlite
+
+# Python
+*.egg-info/
+.pytest_cache/
+.coverage
