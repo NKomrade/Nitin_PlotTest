@@ -28,38 +28,46 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600">Welcome back, {session.user?.name}!</p>
+        {/* Header Section */}
+        <div className="mb-12">
+          <div className="bg-white text-black p-6 border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
+            <p className="text-lg">Welcome back, {session.user?.name}!</p>
+          </div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Upload CSV</CardTitle>
-              <CardDescription>
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <Card className="border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-xl font-bold text-black">Upload CSV</CardTitle>
+              <CardDescription className="text-gray-600">
                 Upload your dataset to create visualizations
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Link href="/upload">
-                <Button className="w-full">Upload Data</Button>
+                <Button className="w-full h-12 bg-black text-white hover:bg-black/80 border-2 border-black font-semibold text-base transition-all duration-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px]">
+                  Upload Data
+                </Button>
               </Link>
             </CardContent>
           </Card>
           
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Uploads</CardTitle>
-              <CardDescription>
+          <Card className="border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-xl font-bold text-black">Recent Uploads</CardTitle>
+              <CardDescription className="text-gray-600">
                 View your recent data uploads
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-500">No uploads yet</p>
+              <div className="bg-gray-100 p-4 border-2 border-black">
+                <p className="text-sm text-gray-700 font-medium text-center">No uploads yet</p>
+              </div>
             </CardContent>
           </Card>
         </div>
