@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Home } from 'lucide-react'
+import { Home, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 import { apiClient } from '@/lib/api'
 
@@ -19,7 +19,16 @@ export function SignUpForm() {
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const router = useRouter()
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,13 +42,15 @@ export function SignUpForm() {
     }
 
     try {
-      await apiClient.post('/auth/signup', {
+      const response = await apiClient.post('/auth/signup', {
         name: formData.name,
         email: formData.email,
         password: formData.password
       })
-      
-      router.push('/auth/signin?message=Account created successfully')
+
+      if (response.data) {
+        router.push('/auth/signin')
+      }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'An error occurred')
     } finally {
@@ -47,16 +58,9 @@ export function SignUpForm() {
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }))
-  }
-
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <div className="w-full max-w-xl">
+      <div className="w-full max-w-2xl">
         {/* Back to Home Button */}
         <div className="mb-6">
           <Link href="/">
@@ -128,30 +132,56 @@ export function SignUpForm() {
                     <label className="block text-sm font-semibold text-black mb-2">
                       Password
                     </label>
-                    <Input
-                      type="password"
-                      name="password"
-                      placeholder="Create a password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      required
-                      className="border-2 border-black focus:border-black focus:ring-0 h-12 text-base bg-white"
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        placeholder="Create a password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                        className="border-2 border-black focus:border-black focus:ring-0 h-12 text-base bg-white pr-12"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-black transition-colors"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="w-5 h-5" />
+                        ) : (
+                          <Eye className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
                   </div>
                   
                   <div>
                     <label className="block text-sm font-semibold text-black mb-2">
                       Confirm Password
                     </label>
-                    <Input
-                      type="password"
-                      name="confirmPassword"
-                      placeholder="Confirm your password"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      required
-                      className="border-2 border-black focus:border-black focus:ring-0 h-12 text-base bg-white"
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showConfirmPassword ? "text" : "password"}
+                        name="confirmPassword"
+                        placeholder="Confirm your password"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        required
+                        className="border-2 border-black focus:border-black focus:ring-0 h-12 text-base bg-white pr-12"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-black transition-colors"
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOff className="w-5 h-5" />
+                        ) : (
+                          <Eye className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
