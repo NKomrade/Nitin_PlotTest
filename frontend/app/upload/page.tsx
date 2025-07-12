@@ -26,14 +26,9 @@ export default function UploadPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Upload CSV Data</h1>
-          <p className="text-gray-600">Upload your dataset to create interactive visualizations</p>
-        </div>
-        
         <CSVUpload />
       </div>
     </div>

@@ -15,11 +15,20 @@ async def generate_plot(
 ):
     db = get_database()
     
-    # Verify file ownership
-    file_doc = db.csv_files.find_one({
-        "_id": plot_request.file_id,
-        "user_id": current_user.id
-    })
+    # Find user and their uploaded files
+    user = db.users.find_one({"_id": current_user.id})
+    if not user or "uploaded_files" not in user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No uploaded files found"
+        )
+    
+    # Find the specific file
+    file_doc = None
+    for file in user["uploaded_files"]:
+        if file["file_id"] == plot_request.file_id:
+            file_doc = file
+            break
     
     if not file_doc:
         raise HTTPException(

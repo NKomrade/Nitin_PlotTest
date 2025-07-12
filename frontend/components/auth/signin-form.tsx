@@ -5,8 +5,9 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Home } from 'lucide-react'
 import Link from 'next/link'
 
 export function SignInForm() {
@@ -41,8 +42,21 @@ export function SignInForm() {
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+        {/* Back to Home Button */}
+        <div className="mb-6">
+          <Link href="/">
+            <Button 
+              variant="outline" 
+              className="bg-white text-black hover:bg-gray-100 border-2 border-black font-semibold transition-all duration-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px]"
+            >
+              <Home className="w-4 h-4 mr-2" />
+              Back to Home
+            </Button>
+          </Link>
+        </div>
+
         {/* Header Section */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-black mb-2">Welcome Back</h1>

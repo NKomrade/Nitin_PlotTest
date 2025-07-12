@@ -39,7 +39,7 @@ export default function Home() {
                 Upload your CSV data and create interactive scatter plots
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4 p-8 pt-0">
+            <CardContent className="space-y-6 p-8 pt-0">
               <Link href="/auth/signin">
                 <Button className="w-full h-12 bg-black text-white hover:bg-gray-800 border-2 border-black font-semibold text-base transition-all duration-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px]">
                   Sign In

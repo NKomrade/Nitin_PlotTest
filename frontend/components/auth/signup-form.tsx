@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Home } from 'lucide-react'
 import Link from 'next/link'
 import { apiClient } from '@/lib/api'
 
@@ -54,8 +55,21 @@ export function SignUpForm() {
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="w-full max-w-xl">
+        {/* Back to Home Button */}
+        <div className="mb-6">
+          <Link href="/">
+            <Button 
+              variant="outline" 
+              className="bg-white text-black hover:bg-gray-100 border-2 border-black font-semibold transition-all duration-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px]"
+            >
+              <Home className="w-4 h-4 mr-2" />
+              Back to Home
+            </Button>
+          </Link>
+        </div>
+
         {/* Header Section */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-black mb-2">Join Us</h1>
@@ -74,65 +88,71 @@ export function SignUpForm() {
                 </Alert>
               )}
               
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-black mb-2">
-                    Full Name
-                  </label>
-                  <Input
-                    type="text"
-                    name="name"
-                    placeholder="Enter your full name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="border-2 border-black focus:border-black focus:ring-0 h-12 text-base bg-white"
-                  />
+              <div className="space-y-6">
+                {/* First Row: Name and Email */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-black mb-2">
+                      Full Name
+                    </label>
+                    <Input
+                      type="text"
+                      name="name"
+                      placeholder="Enter your full name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="border-2 border-black focus:border-black focus:ring-0 h-12 text-base bg-white"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-semibold text-black mb-2">
+                      Email Address
+                    </label>
+                    <Input
+                      type="email"
+                      name="email"
+                      placeholder="Enter your email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="border-2 border-black focus:border-black focus:ring-0 h-12 text-base bg-white"
+                    />
+                  </div>
                 </div>
                 
-                <div>
-                  <label className="block text-sm font-semibold text-black mb-2">
-                    Email Address
-                  </label>
-                  <Input
-                    type="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="border-2 border-black focus:border-black focus:ring-0 h-12 text-base bg-white"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-semibold text-black mb-2">
-                    Password
-                  </label>
-                  <Input
-                    type="password"
-                    name="password"
-                    placeholder="Create a password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    className="border-2 border-black focus:border-black focus:ring-0 h-12 text-base bg-white"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-semibold text-black mb-2">
-                    Confirm Password
-                  </label>
-                  <Input
-                    type="password"
-                    name="confirmPassword"
-                    placeholder="Confirm your password"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    required
-                    className="border-2 border-black focus:border-black focus:ring-0 h-12 text-base bg-white"
-                  />
+                {/* Second Row: Password and Confirm Password */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-black mb-2">
+                      Password
+                    </label>
+                    <Input
+                      type="password"
+                      name="password"
+                      placeholder="Create a password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      className="border-2 border-black focus:border-black focus:ring-0 h-12 text-base bg-white"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-semibold text-black mb-2">
+                      Confirm Password
+                    </label>
+                    <Input
+                      type="password"
+                      name="confirmPassword"
+                      placeholder="Confirm your password"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      required
+                      className="border-2 border-black focus:border-black focus:ring-0 h-12 text-base bg-white"
+                    />
+                  </div>
                 </div>
               </div>
               

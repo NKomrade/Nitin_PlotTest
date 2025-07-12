@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, status
 from app.models.csv_data import CSVResponse
-from app.models.user import UserResponse
+from app.models.user import UserResponse, CSVFileData
 from app.routes.auth import get_current_user
 from app.utils.csv_handler import process_csv_file, validate_csv_file
 from app.database import get_database
@@ -39,20 +39,23 @@ async def upload_csv(
         # Process CSV data
         processed_data = process_csv_file(file_content)
         
-        # Store metadata in database
-        db = get_database()
-        csv_doc = {
-            "_id": file_id,
-            "filename": file.filename,
-            "columns": processed_data["columns"],
-            "row_count": processed_data["row_count"],
-            "file_size": len(file_content),
-            "uploaded_at": datetime.utcnow(),
-            "user_id": current_user.id,
-            "file_path": file_path
-        }
+        # Create CSV file data object
+        csv_file_data = CSVFileData(
+            file_id=file_id,
+            filename=file.filename,
+            columns=processed_data["columns"],
+            row_count=processed_data["row_count"],
+            file_size=len(file_content),
+            uploaded_at=datetime.utcnow(),
+            file_path=file_path
+        )
         
-        db.csv_files.insert_one(csv_doc)
+        # Update user document with new CSV file data
+        db = get_database()
+        db.users.update_one(
+            {"_id": current_user.id},
+            {"$push": {"uploaded_files": csv_file_data.dict()}}
+        )
         
         return CSVResponse(
             id=file_id,
@@ -60,7 +63,7 @@ async def upload_csv(
             columns=processed_data["columns"],
             row_count=processed_data["row_count"],
             file_size=len(file_content),
-            uploaded_at=csv_doc["uploaded_at"],
+            uploaded_at=csv_file_data.uploaded_at,
             user_id=current_user.id,
             file_id=file_id,
             data=processed_data["data"][:100]  # Return first 100 rows for preview
@@ -75,15 +78,18 @@ async def upload_csv(
 @router.get("/files")
 async def get_user_files(current_user: UserResponse = Depends(get_current_user)):
     db = get_database()
-    files = list(db.csv_files.find({"user_id": current_user.id}))
+    user = db.users.find_one({"_id": current_user.id})
+    
+    if not user or "uploaded_files" not in user:
+        return []
     
     return [
         {
-            "id": file["_id"],
+            "id": file["file_id"],
             "filename": file["filename"],
             "columns": file["columns"],
             "row_count": file["row_count"],
             "uploaded_at": file["uploaded_at"]
         }
-        for file in files
+        for file in user["uploaded_files"]
     ]
