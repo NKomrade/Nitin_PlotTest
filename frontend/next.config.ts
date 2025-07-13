@@ -13,15 +13,18 @@ const nextConfig: NextConfig = {
   },
   // Updated: moved from experimental.serverComponentsExternalPackages
   serverExternalPackages: ['mongoose'],
-  // Enable static optimization
+  // Enable standalone output for deployment
   output: 'standalone',
   // Optimize images
   images: {
     domains: [],
+    unoptimized: true,
   },
   // Environment variables
   env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
 };
 
