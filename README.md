@@ -14,6 +14,11 @@ A full-stack web application for uploading CSV datasets and creating interactive
 - 📊 **Data Analytics** - Real-time statistics and data insights
 - 🔒 **Secure File Management** - Files associated with user accounts
 
+## Demo Video
+
+[Click here to watch the demo](https://drive.google.com/file/d/1xbSb74oDS4xPXDubQ4UBS6ibUxqfDY8X/view?usp=sharing)
+
+
 ## Tech Stack
 
 ### Frontend
@@ -204,7 +209,7 @@ The application is designed for easy deployment on Render:
 
 1. **Backend Service Configuration:**
    - Build Command: `pip install -r requirements.txt`
-   - Start Command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+   - Start Command: `gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT`
    - Environment Variables: MongoDB URI, JWT secrets, CORS origins
 
 2. **Frontend Service Configuration:**
@@ -233,10 +238,3 @@ NEXT_PUBLIC_API_URL=https://your-backend-domain.com
 4. **Create Visualization** - Select X and Y axes for scatter plot
 5. **Interactive Analysis** - Explore data with dynamic chart controls
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
