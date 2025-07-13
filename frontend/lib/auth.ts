@@ -2,6 +2,23 @@ import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { apiClient } from './api'
 
+// Extend the built-in session and user types
+declare module 'next-auth' {
+  interface User {
+    accessToken?: string
+  }
+  
+  interface Session {
+    accessToken?: string
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    accessToken?: string
+  }
+}
+
 export const authConfig: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -45,13 +62,14 @@ export const authConfig: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken
+      if (token.accessToken) {
+        session.accessToken = token.accessToken
+      }
       return session
     }
   },
   pages: {
-    signIn: '/auth/signin',
-    signUp: '/auth/signup'
+    signIn: '/auth/signin'
   },
   session: {
     strategy: 'jwt'
