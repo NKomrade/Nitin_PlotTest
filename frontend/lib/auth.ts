@@ -1,6 +1,6 @@
 import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { apiClient } from './api'
+import axios from 'axios'
 
 // Extend the built-in session and user types
 declare module 'next-auth' {
@@ -19,6 +19,15 @@ declare module 'next-auth/jwt' {
   }
 }
 
+// Create a specific client for NextAuth since it runs server-side
+const authApiClient = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://backend:8000',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  timeout: 10000
+})
+
 export const authConfig: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -33,7 +42,7 @@ export const authConfig: NextAuthOptions = {
         }
 
         try {
-          const response = await apiClient.post('/auth/login', {
+          const response = await authApiClient.post('/auth/login', {
             email: credentials.email,
             password: credentials.password
           })

@@ -1,16 +1,29 @@
 import axios from 'axios'
 
-export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
-  headers: {
-    'Content-Type': 'application/json'
+// Function to get the correct API URL based on environment
+const getApiUrl = () => {
+  // Server-side (NextAuth runs here): use internal Docker service
+  if (typeof window === 'undefined') {
+    return process.env.NEXTAUTH_BACKEND_URL || 'http://backend:8000'
   }
+  
+  // Client-side (browser): use the public API URL
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+}
+
+export const apiClient = axios.create({
+  baseURL: getApiUrl(),
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 })
 
-// Request interceptor to add auth token
+// Request interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    // Token will be added by individual components when needed
+    // Always use the correct URL for each request
+    config.baseURL = getApiUrl()
     return config
   },
   (error) => {
@@ -18,14 +31,17 @@ apiClient.interceptors.request.use(
   }
 )
 
-// Response interceptor for error handling
+// Response interceptor
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized access
-      window.location.href = '/auth/signin'
+      if (typeof window !== 'undefined') {
+        window.location.href = '/auth/signin'
+      }
     }
     return Promise.reject(error)
   }
 )
+
+export default apiClient
