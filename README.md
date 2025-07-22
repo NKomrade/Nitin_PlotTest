@@ -41,12 +41,51 @@ A full-stack web application for uploading CSV datasets and creating interactive
 
 ## Setup Instructions
 
-### Prerequisites
+### Option 1: Docker Deployment (Recommended)
+
+#### Prerequisites
+- Docker Desktop installed
+- MongoDB Atlas account
+
+#### Quick Start with Docker
+
+1. **Clone the repository:**
+```bash
+git clone <repository-url>
+cd DataViz
+```
+
+2. **Create environment file:**
+   Create `.env` file in the root directory:
+```env
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/datawiz?retryWrites=true&w=majority
+JWT_SECRET=your-super-secret-jwt-key-here
+JWT_ALGORITHM=HS256
+JWT_EXPIRATION_TIME=86400
+CORS_ORIGINS=http://localhost:3000,http://frontend:3000
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-nextauth-secret-key
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+3. **Build and run with Docker:**
+```bash
+docker-compose up --build
+```
+
+4. **Access the application:**
+   - Frontend: `http://localhost:3000`
+   - Backend API: `http://localhost:8000`
+   - API Documentation: `http://localhost:8000/docs`
+
+### Option 2: Local Development Setup
+
+#### Prerequisites
 - Node.js 18+
 - Python 3.11+
 - MongoDB Atlas account
 
-### Backend Setup
+#### Backend Setup
 
 1. **Navigate to backend directory:**
 ```bash
@@ -81,7 +120,7 @@ python main.py
 ```
 Backend runs on `http://localhost:8000`
 
-### Frontend Setup
+#### Frontend Setup
 
 1. **Navigate to frontend directory:**
 ```bash
@@ -125,7 +164,13 @@ Frontend runs on `http://localhost:3000`
 ## Project Structure
 
 ```
-DataWiz/
+DataViz/
+├── docker-compose.yml        # Docker orchestration
+├── Dockerfile.backend       # Backend container configuration
+├── Dockerfile.frontend      # Frontend container configuration
+├── .env                     # Environment variables (create from .env.example)
+├── .env.example            # Environment template
+├── .dockerignore           # Docker ignore patterns
 ├── backend/
 │   ├── app/
 │   │   ├── config.py          # Configuration settings
@@ -141,7 +186,7 @@ DataWiz/
 │   ├── uploads/               # File storage directory
 │   ├── main.py               # FastAPI application
 │   ├── requirements.txt      # Python dependencies
-│   └── .env                  # Environment variables
+│   └── .env                  # Backend environment variables
 ├── frontend/
 │   ├── app/
 │   │   ├── (auth)/           # Authentication pages
@@ -157,8 +202,9 @@ DataWiz/
 │   ├── lib/
 │   │   ├── api.ts            # API client configuration
 │   │   └── utils.ts          # Utility functions
+│   ├── next.config.js        # Next.js configuration
 │   ├── package.json          # Node.js dependencies
-│   └── .env.local            # Environment variables
+│   └── .env.local            # Frontend environment variables
 └── README.md
 ```
 
@@ -191,6 +237,34 @@ DataWiz/
 
 ## Development
 
+### Docker Development Commands
+
+```bash
+# Start development environment with hot reload
+docker-compose up --build
+
+# View logs from all services
+docker-compose logs -f
+
+# View logs from specific service
+docker-compose logs backend
+docker-compose logs frontend
+
+# Stop all services
+docker-compose down
+
+# Rebuild specific service
+docker-compose build backend
+docker-compose up -d backend
+
+# Access container shell for debugging
+docker-compose exec backend bash
+docker-compose exec frontend sh
+
+# Check service status
+docker-compose ps
+```
+
 ### Backend Development
 - **API Documentation** - Available at `http://localhost:8000/docs`
 - **Development Mode** - Use `uvicorn main:app --reload` for auto-reload
@@ -203,6 +277,12 @@ DataWiz/
 - **Tailwind CSS** - Utility-first CSS framework
 
 ## Deployment
+
+### Docker Deployment Benefits
+- **Environment Consistency** - Same environment across development, staging, and production
+- **Easy Scaling** - Scale services independently with `docker-compose up --scale backend=3`
+- **Isolation** - Each service runs in its own container for security and stability
+- **Quick Setup** - One-command deployment on any Docker-enabled server
 
 ### Render Deployment
 The application is designed for easy deployment on Render:
@@ -237,4 +317,38 @@ NEXT_PUBLIC_API_URL=https://your-backend-domain.com
 3. **Dashboard** - View uploaded files and analytics
 4. **Create Visualization** - Select X and Y axes for scatter plot
 5. **Interactive Analysis** - Explore data with dynamic chart controls
+
+## Docker Configuration
+
+The project includes Docker configuration files for containerized deployment:
+
+### Docker Files Overview
+- **`Dockerfile.backend`** - Multi-stage Python container with FastAPI
+- **`Dockerfile.frontend`** - Multi-stage Node.js container with Next.js standalone build
+- **`docker-compose.yml`** - Orchestrates both services with networking
+- **`.dockerignore`** - Excludes unnecessary files from Docker context
+
+### Environment Security
+⚠️ **Important Security Note:**
+- Never commit the `.env` file with real credentials to Git
+- Use `.env.example` as a template for team members
+- Set up proper `.gitignore` rules to exclude sensitive files
+
+### Docker Commands Quick Reference
+```bash
+# Build and run all services
+docker-compose up --build
+
+# Run in detached mode
+docker-compose up -d --build
+
+# View live logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+
+# Scale services for production
+docker-compose up --scale backend=3 --scale frontend=2
+```
 
