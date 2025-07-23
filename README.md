@@ -66,6 +66,7 @@ CORS_ORIGINS=http://localhost:3000,http://frontend:3000
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-nextauth-secret-key
 NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_BACKEND_URL=http://backend:8000
 ```
 
 3. **Build and run with Docker:**
